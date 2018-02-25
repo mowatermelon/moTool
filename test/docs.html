@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>moTool工具使用文档</title>
+  <link rel="stylesheet" href="../lib/css/layui.css">
+</head>
+<body>
+  <div id="demo" class="layui-container">
+    <h1 class="layui-text-center">moTool工具方法使用概述</h1>
+    <hr class="layui-bg-blue">
+    <ul class="layui-timeline">
+      <li v-for="func in funcs" class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+        <div class="layui-timeline-content layui-text">
+            <fieldset class="layui-elem-field">
+                <legend>{{ func.name }}方法测试</legend>
+                <div class="layui-field-box">
+                  <h4>函数描述:{{ func.content }}</h4>        
+                  <h4>使用方法:{{ func.use }}</h4>
+                  <h4>属性列表</h4> 
+                  <table class="layui-table">
+                    <tr>
+                      <td>属性名称</td>
+                      <td>属性数据类型</td>
+                      <td>属性描述</td> 
+                      <td>属性举例</td>                                             
+                    </tr>
+                    <tr v-for="param in func.params">
+                        <td>{{ param.name }}</td>
+                        <td>{{ param.type }}</td>
+                        <td>{{ param.explain }}</td> 
+                        <td>{{ param.example }}</td>                                               
+                      </tr>          
+                  </table> 
+                </div>
+                <blockquote class="layui-code">
+                  <p>测试代码：</p>
+                  <p>{{ func.code }}</p>            
+                </blockquote> 
+                <blockquote class="layui-elem-quote layui-quote-nm">
+                  <p>测试结果：</p>
+                  <p>{{ func.exec }}</p>                             
+                </blockquote>                
+            </fieldset>
+            
+        </div>
+      </li>
+    </ul>
+    <!-- <input v-model="message_1"> -->
+  </div>
+
+</body>
+<script src="../lib/js/vue.min.js"></script>
+<script src="../dist/moTool.js"></script>
+<script>
+    var app6 = new Vue({
+    el: '#demo',
+    data: {
+      funcs: [
+        {
+          name:'splitTagStr',
+          use:'moTool.splitTagStr(str, tagStr, flag)',
+          content:'将html字符串内容按照固定格式进行分割',
+          code:'moTool.splitTagStr("<table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table>", "table", 1)',
+          exec:'["<table><tr><td>1</td><td>2</td></tr></table>", "<table><tr><td>1</td><td>2</td></tr></table>", "<table><tr><td>1</td><td>2</td></tr></table>", "<table><tr><td>1</td><td>2</td></tr></table>", "<table><tr><td>1</td><td>2</td></tr></table>", "<table><tr><td>1</td><td>2</td></tr></table>"]',
+          params:[
+            {
+              name:'str',
+              type:'String',
+              explain:'被检索的字符串',
+              example:'<table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table>'
+            },
+            {
+              name:'tagStr',
+              type:'String',
+              explain:'用来做分割tag标签名',
+              example:"table",
+            },
+            {
+              name:'flag',
+              type:'Number',
+              explain:'数据返回模式,值为0代表只返回第一次匹配的值，默认值;值为1代表返回所有匹配的数组集合',
+              example:'0或者1'
+            }
+          ]
+        },
+        {
+          name:'cutTagStr',
+          use:'moTool.cutTagStr(str, tagStr, flag)',
+          content:'截取html字符串中某段标签内容',
+          code:'moTool.cutTagStrcutTagStr("<table><caption>test</caption><tr><td>1</td><td>2</td></tr></table>", "caption", 2)',
+          exec:'{tag: "<caption>test</caption>", text: "<table><tr><td>1</td><td>2</td></tr></table>"}',
+          params:[
+            {
+              name:'str',
+              type:'String',
+              explain:'被检索的字符串',
+              example:'<table><caption>test</caption><tr><td>1</td><td>2</td></tr></table>'
+            },
+            {
+              name:'tagStr',
+              type:'String',
+              explain:'需要选中的tag标签名',
+              example:"caption",
+            },
+            {
+              name:'flag',
+              type:'Number',
+              explain:'数据返回模式,值为0代表只返回被检索标签内容，默认值;值为1只返回剔除了检索标签内容的字符串;值为2返回被检索标签内容，和剔除了检索标签内容的字符串',
+              example:'0或者1或者2'
+            }
+          ]
+        }
+      ]
+    },
+    methods: {
+    }
+  })
+</script>
+</html>
