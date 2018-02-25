@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>测试moTool工具使用</title>
+  <link rel="stylesheet" href="../lib/css/layui.css">
+</head>
+<body>
+  <div id="demo" class="layui-container">
+    <h1 class="layui-text-center">moTool工具方法测试</h1>
+    <hr class="layui-bg-blue">
+    <ul class="layui-timeline">
+      <li v-for="func in funcs" class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+        <div class="layui-timeline-content layui-text">
+            <fieldset class="layui-elem-field">
+                <legend>{{ func.name }}方法测试</legend>
+                <div class="layui-field-box">
+                  <h4>函数描述:{{ func.content }}</h4> 
+                  <form class="layui-form">
+                    <div class="layui-form-item" v-for="param in func.params">
+                      <label class="layui-form-label">{{ param.name }}</label>
+                      <div class="layui-input-block" v-if="!param.isSel">
+                        <input type="text" name="title" class="layui-input" v-modal="param.data">
+                      </div>
+                      <div class="layui-input-block" v-if="param.isSel">
+                        <select name="mode">
+                          <option value=""></option>
+                          <option v-for="value in param.values" v-bind:value="value">{{ value }}</option>
+                        </select>
+                      </div>                      
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                  <div class="layui-input-block">
+                      <button class="layui-btn" @click="func.exec = func.exec===func.name?'':func.name">测试</button>
+                  </div>
+                </div>
+                <blockquote class="layui-elem-quote layui-quote-nm">
+                  <p>测试结果：</p>
+                  <p>{{ func.exec }}</p>                             
+                </blockquote>                
+            </fieldset>
+            
+        </div>
+      </li>
+    </ul>
+    <!-- <input v-model="message_1"> -->
+  </div>
+
+</body>
+<script src="../lib/js/vue.min.js"></script>
+<script src="../lib/js/layui.js"></script>
+<script src="../lib/js/lay/modules/form.js"></script>
+<script src="../dist/moTool.js"></script>
+<script>
+    var app6 = new Vue({
+    el: '#demo',
+    data: {
+      funcs: [
+        {
+          name:'splitTagStr',
+          use:'moTool.splitTagStr(str, tagStr, flag)',
+          content:'将html字符串内容按照固定格式进行分割',
+          code:'moTool.splitTagStr("<table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table>", "table", 1)',
+          exec:'',
+          params:[
+            {
+              name:'检索内容',
+              data:'',
+              isSel:false
+            },
+            {
+              name:'分割tag值',
+              data:'',
+              isSel:false
+            },
+            {
+              name:'返回模式',
+              data:'',
+              isSel:true,
+              values:[0,1]            
+            }
+          ]
+        },
+        {
+          name:'cutTagStr',
+          use:'moTool.cutTagStr(str, tagStr, flag)',
+          content:'截取html字符串中某段标签内容',
+          code:'moTool.cutTagStrcutTagStr("<table><caption>test</caption><tr><td>1</td><td>2</td></tr></table>", "caption", 2)',
+          exec:'',
+          params:[
+            {
+                name:'检索内容',
+                data:'',
+                isSel:false
+              },
+              {
+                name:'选中tag值',
+                data:'',
+                isSel:false
+              },
+              {
+                name:'返回模式',
+                data:'',
+                isSel:true,
+                values:[0,1,2]            
+              }
+          ]
+        }
+      ]
+    },
+    methods: {
+      splitTagStr:function(){
+        console.log("splitTagStr");
+      },
+      cutTagStr:function(){
+        console.log("cutTagStr");
+      }
+    }
+  })
+</script>
+</html>
