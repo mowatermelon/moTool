@@ -1,0 +1,25 @@
+{
+  "name": "motool",
+  "version": "0.0.13",
+  "description": "个人工具函数整理插件",
+  "unpkg": "dist/moTool.js",
+  "jsdelivr": "dist/moTool.js",
+  "files": [
+    "src",
+    "dist/*.js",
+    "lib/*.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mowatermelon/moTool.git"
+  },
+  "keywords": [
+    "moTool"
+  ],
+  "author": "Eva Wu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mowatermelon/moTool/issues"
+  },
+  "homepage": "https://github.com/mowatermelon/moTool#docs"
+}
