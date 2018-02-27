@@ -36,6 +36,7 @@
                 <div class="layui-form-item">
                   <div class="layui-input-block">
                       <button class="layui-btn" @click="func.exec = func.exec===func.name?'':func.name">测试</button>
+                      <!-- <button class="layui-btn" @click="func.name">测试</button> -->
                   </div>
                 </div>
                 <blockquote class="layui-elem-quote layui-quote-nm">
@@ -54,63 +55,13 @@
 <script src="../lib/js/vue.min.js"></script>
 <script src="../lib/js/layui.js"></script>
 <script src="../lib/js/lay/modules/form.js"></script>
+<script src="../lib/js/data.js"></script>
 <script src="../dist/moTool.js"></script>
 <script>
     var app6 = new Vue({
     el: '#demo',
     data: {
-      funcs: [
-        {
-          name:'splitTagStr',
-          use:'moTool.splitTagStr(str, tagStr, flag)',
-          content:'将html字符串内容按照固定格式进行分割',
-          code:'moTool.splitTagStr("<table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table><table><tr><td>1</td><td>2</td></tr></table>", "table", 1)',
-          exec:'',
-          params:[
-            {
-              name:'检索内容',
-              data:'',
-              isSel:false
-            },
-            {
-              name:'分割tag值',
-              data:'',
-              isSel:false
-            },
-            {
-              name:'返回模式',
-              data:'',
-              isSel:true,
-              values:[0,1]            
-            }
-          ]
-        },
-        {
-          name:'cutTagStr',
-          use:'moTool.cutTagStr(str, tagStr, flag)',
-          content:'截取html字符串中某段标签内容',
-          code:'moTool.cutTagStrcutTagStr("<table><caption>test</caption><tr><td>1</td><td>2</td></tr></table>", "caption", 2)',
-          exec:'',
-          params:[
-            {
-                name:'检索内容',
-                data:'',
-                isSel:false
-              },
-              {
-                name:'选中tag值',
-                data:'',
-                isSel:false
-              },
-              {
-                name:'返回模式',
-                data:'',
-                isSel:true,
-                values:[0,1,2]            
-              }
-          ]
-        }
-      ]
+      funcs: getTestData()
     },
     methods: {
       splitTagStr:function(){
