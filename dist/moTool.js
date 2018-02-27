@@ -2,7 +2,7 @@
  * @Author: melon.wuEva 
  * @Date: 2018-02-25 13:48:40 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-02-27 18:29:38
+ * @Last Modified time: 2018-02-27 18:53:51
  */
 
 "use strict";
@@ -46,72 +46,89 @@ var moTool = {
      * 对外使用的工具类方法
      */
     //将html字符串内容按照固定格式进行分割
-    splitTagStr: (str, tagStr, flag)=>{
+    splitTagStr: (param)=>{
         /**
-         * @param str String 被检索的字符串
-         * @param tagStr String 用来做分割tag标签名
-         * @param flag Number 数据返回模式
+         * @param 01 str String 被检索的字符串
+         * @param 02 tagStr String 用来做分割tag标签名
+         * @param 03 flag Number 数据返回模式
          *        0 只返回第一次匹配的值，默认值  String   
          *        1 返回所有匹配的值 array   
          */
         let res = null;
-        const tacitFlag = 0;
-        if (!flag) {
-            flag = tacitFlag;
-        } else {
-            if (typeof(flag) !== "number") {
+        if(param.length === 3){
+            const tacitFlag = 1;            
+            let str = param[0];
+            let tagStr = param[1];        
+            let flag = param[2];    
+            if (!flag) {
                 flag = tacitFlag;
+            } else {
+                if (typeof(flag) !== "number") {
+                    flag = tacitFlag;
+                }
+            } 
+    
+            let searchReg = new RegExp("<" + tagStr + "(.*?)>.*?<\/" + tagStr + ">", "g");
+            switch (flag) {
+            case 0:
+                res = str.match(searchReg)[0];
+                break;
+            case 1:
+                res = str.match(searchReg);
+                break;
+            default:
+                res = str.match(searchReg)[0];
             }
-        } 
-
-        let searchReg = new RegExp("<" + tagStr + "(.*?)>.*?<\/" + tagStr + ">", "g");
-        switch (flag) {
-        case 0:
-            res = str.match(searchReg)[0];
-            break;
-        case 1:
-            res = str.match(searchReg);
-            break;
-        default:
-            res = str.match(searchReg)[0];
+    
+        }else{
+            res = "Parameter pass error,wrong number of arguments!";
         }
 
         return res;
     },
     //截取html字符串中某段标签内容
-    cutTagStr: (str, tagStr, flag)=>{
+    cutTagStr: (params)=>{
         /**
-         * @param str String 被检索的字符串
-         * @param tagStr String 需要选中的tag标签名
-         * @param flag Number 数据返回模式
+         * @param 01 str String 被检索的字符串
+         * @param 02 tagStr String 需要选中的tag标签名
+         * @param 03 flag Number 数据返回模式
          *        0 只返回被检索标签内容，默认值  String   
          *        1 只返回剔除了检索标签内容的字符串    String       
          *        2 返回，被检索标签内容，和剔除了检索标签内容的字符串    Json   
          *          {tag:只返回被检索标签内容,text:剔除了检索标签内容的字符串}
          */
         let res = null;
-        const tacitFlag = 0;
-        let searchReg = new RegExp("<" + tagStr + "(.*?)>(.+)<\/" + tagStr + ">", "g");
-        if (!flag) {
-            flag = tacitFlag;
-        } else {
-            if (typeof(flag) !== "number") {
+        if(params.length === 3){
+            const tacitFlag = 2;
+            let str = params[0];
+            let tagStr = params[1];        
+            let flag = params[2];        
+                    
+            let searchReg = new RegExp("<" + tagStr + "(.*?)>(.+)<\/" + tagStr + ">", "g");
+            if (!flag) {
                 flag = tacitFlag;
+            } else {
+                if (typeof(flag) !== "number") {
+                    flag = tacitFlag;
+                }
             }
+            switch (flag) {
+            case 0:
+                res = str.match(searchReg)[0];
+                break;
+            case 1:
+                res = str.replace(searchReg, "");
+                break;
+            case 2:
+                res = {tag: str.match(searchReg)[0], text: str.replace(searchReg, "")};
+                break;
+            default:
+                res = {tag: str.match(searchReg)[0], text: str.replace(searchReg, "")};
+            }            
+        }else{
+            res = "Parameter pass error,wrong number of arguments!";
         }
-        switch (flag) {
-        case 0:
-            res = str.match(searchReg)[0];
-            break;
-        case 1:
-            res = str.replace(searchReg, "");
-            break;
-        case 2:
-            res = {tag: str.match(searchReg)[0], text: str.replace(searchReg, "")};
-            break;
-        default:
-            res = {tag: str.match(searchReg)[0], text: str.replace(searchReg, "")};
-        }
+
 
         return res;
     }
