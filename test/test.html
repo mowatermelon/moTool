@@ -23,25 +23,25 @@
                     <div class="layui-form-item" v-for="param in func.params">
                       <label class="layui-form-label">{{ param.name }}</label>
                       <div class="layui-input-block" v-if="!param.isSel">
-                        <input type="text" name="title" class="layui-input" v-modal="param.data">
+                        <input type="text" v-model="param.data" name="title" class="layui-input">
                       </div>
                       <div class="layui-input-block" v-if="param.isSel">
                         <select name="mode">
                           <option value=""></option>
-                          <option v-for="value in param.values" v-bind:value="value">{{ value }}</option>
+                          <option v-for="value in param.values">{{ value }}</option>
                         </select>
-                      </div>                      
+                      </div>
+                                            
                     </div>
                 </div>
                 <div class="layui-form-item">
                   <div class="layui-input-block">
-                      <button class="layui-btn" @click="func.exec = func.exec===func.name?'':func.name">测试</button>
-                      <!-- <button class="layui-btn" @click="func.name">测试</button> -->
+                      <button class="layui-btn" @click="func.exec(func.params,$event)">测试</button>
                   </div>
                 </div>
                 <blockquote class="layui-elem-quote layui-quote-nm">
                   <p>测试结果：</p>
-                  <p>{{ func.exec }}</p>                             
+                  <p>{{ func.res }}</p>                             
                 </blockquote>                
             </fieldset>
             
@@ -55,22 +55,15 @@
 <script src="../lib/js/vue.min.js"></script>
 <script src="../lib/js/layui.js"></script>
 <script src="../lib/js/lay/modules/form.js"></script>
-<script src="../lib/js/data.js"></script>
 <script src="../dist/moTool.js"></script>
+<script src="../lib/js/data.js"></script>
 <script>
     var app6 = new Vue({
     el: '#demo',
     data: {
       funcs: getTestData()
     },
-    methods: {
-      splitTagStr:function(){
-        console.log("splitTagStr");
-      },
-      cutTagStr:function(){
-        console.log("cutTagStr");
-      }
-    }
+    methods: {}
   })
 </script>
 </html>
