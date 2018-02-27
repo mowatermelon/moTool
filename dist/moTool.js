@@ -2,15 +2,51 @@
  * @Author: melon.wuEva 
  * @Date: 2018-02-25 13:48:40 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-02-25 15:53:11
+ * @Last Modified time: 2018-02-27 18:29:38
  */
 
 "use strict";
 
 //wuEva 常用功能集中插件
 var moTool = {
+    /**
+     * 保证工具类正常使用的方法
+     */
+    //分割原始参数数组，只保留用户输入的value值
+    splitArguData: (params)=>{
+        /**
+         * @param params Array 包含所有参数的param数组
+         *          格式举例[{text:'melon',data:'melon'},{text:'water',data:'water'}]
+         *          每个子数组至少包含一个data属性值
+         */        
+        let res = [];
+        if(params instanceof Array &&params.length>0){
+            for(let i=0;i<params.length;i++){
+                res.push(params[i].data);
+            }
+        }else{
+            res = "Parameter pass error,it is not an array object!";
+        }
+        
+        return res;
+    },
+    //打印正常日志
+    log: (str)=>{
+        console.log(str);
+    },
+    //打印消息日志
+    info: (str)=>{
+        console.info(str);
+    },
+    //打印错误日志
+    err: (str)=>{
+        console.error(str);
+    },
+    /**
+     * 对外使用的工具类方法
+     */
     //将html字符串内容按照固定格式进行分割
-    splitTagStr: function (str, tagStr, flag) {
+    splitTagStr: (str, tagStr, flag)=>{
         /**
          * @param str String 被检索的字符串
          * @param tagStr String 用来做分割tag标签名
@@ -43,7 +79,7 @@ var moTool = {
         return res;
     },
     //截取html字符串中某段标签内容
-    cutTagStr: function (str, tagStr, flag) {
+    cutTagStr: (str, tagStr, flag)=>{
         /**
          * @param str String 被检索的字符串
          * @param tagStr String 需要选中的tag标签名
