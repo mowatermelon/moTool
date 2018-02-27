@@ -26,7 +26,7 @@
                         <input type="text" v-model="param.data" name="title" class="layui-input">
                       </div>
                       <div class="layui-input-block" v-if="param.isSel">
-                        <select name="mode">
+                        <select name="mode" v-model="param.data">
                           <option value=""></option>
                           <option v-for="value in param.values">{{ value }}</option>
                         </select>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="layui-form-item">
                   <div class="layui-input-block">
-                      <button class="layui-btn" @click="func.exec(func.params,$event)">测试</button>
+                      <button class="layui-btn" @click="func.res = func.exec(func.params,$event)">测试</button>
                   </div>
                 </div>
                 <blockquote class="layui-elem-quote layui-quote-nm">
