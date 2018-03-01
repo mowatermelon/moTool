@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>moTool工具使用文档</title>
   <link rel="stylesheet" href="../lib/css/layui.css">
+  <link rel="stylesheet" href="../lib/css/mo.css">
 </head>
 <body>
   <div id="demo" class="layui-container">
@@ -15,7 +16,7 @@
       <li v-for="func in funcs" class="layui-timeline-item">
         <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
         <div class="layui-timeline-content layui-text">
-            <fieldset class="layui-elem-field">
+            <fieldset class="layui-elem-field mo-box-hover">
                 <legend>{{ func.name }}方法测试</legend>
                 <div class="layui-field-box">
                   <h4>函数描述:{{ func.content }}</h4>        
