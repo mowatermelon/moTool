@@ -60,8 +60,8 @@
 <script>
     var app6 = new Vue({
     el: '#demo',
-    data: {
-      funcs: getTestData()
+    data(){
+      return {funcs: getTestData()}
     },
     methods: {}
   })
