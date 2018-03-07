@@ -1,6 +1,6 @@
 {
   "name": "motool",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "个人工具函数整理插件",
   "unpkg": "dist/moTool.js",
   "jsdelivr": "dist/moTool.js",
