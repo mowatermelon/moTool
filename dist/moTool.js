@@ -94,7 +94,13 @@ let moTool = {
      * @param {Any} variable  需要检测的变量值，必选
     */
     testReg:function(reg,variable){
-        return !reg.test(variable);
+        let res = false;
+        if(reg instanceof Array){
+            res = RegExp(reg[0]).test(reg[1]);
+        }else{
+            res = reg.test(variable);
+        }
+        return res;
     },
     /**
      * 判断变量长度是否小于某个长度的方法
