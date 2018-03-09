@@ -50,6 +50,20 @@ let moTool = {
         console.error(variable);
     },
     /**
+     * 返回规定长度和规定填充数组的方法
+     * @param {Number} count  返回数组的长度，必选
+     * @param {Any} variable  返回数组需要填充的内容，必选
+    */
+    fillArr:function(count,variable){
+        let res = false;
+        if(count instanceof Array){
+            res = Array(JSON.parse(count[0])).fill(count[1]);  
+        }else{
+            res = Array(JSON.parse(count)).fill(variable);
+        }
+        return res;
+    },
+    /**
      * 数组去重的方法,通过Array.from()和Set对象来执行
      * @param {Array} arr  需要去重的数组值，必选
     */
@@ -68,7 +82,7 @@ let moTool = {
      * @param {Array} arr  需要进行升序排列的数组值，必选
     */
     sortArr:function(arr){
-        return arr.concat().sort((a,b)=>{return a-b})
+        return arr.concat().sort((a,b) => {return a-b })
     },
     /**
      * 数组中的值是否全部满足回调函数的条件
