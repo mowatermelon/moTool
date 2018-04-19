@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" href="../lib/favicon.ico" type="image/x-icon" />
+  <title>民以食为天</title>
+  <link rel="stylesheet" href="../lib/css/layui.css">
+  <link rel="stylesheet" href="../lib/css/mo.css">  
+</head>
+<body>
+  <div id="menu" class="layui-container">
+    <div class="layui-row">
+      <div class="layui-col-md9">
+        <h1 class="layui-text-center">民以食为天</h1>
+      </div>
+      <div class="layui-col-md3">
+        <button class="layui-btn" @click="resetMenu">重新分割菜品</button>
+      </div>
+    </div>
+    
+    <hr class="layui-bg-blue">
+    <ul class="layui-timeline">
+      <li class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+        <div class="layui-timeline-content layui-text">
+            <div class="layui-form">
+              <div class="layui-form-item" v-show="!isSeparate">
+                <label class="layui-form-label">今日所有菜品</label>
+                <div class="layui-input-block">
+                  <input type="text" name="title" placeholder="请输入今日所有菜品" autocomplete="off" class="layui-input" v-model="menus">
+                </div>
+              </div>
+              <div class="layui-form-item" v-show="isSeparate">
+                <label class="layui-form-label">待选菜品</label>
+                <div class="layui-input-block">
+                  <div class="layui-unselect layui-form-checkbox" lay-skin="" v-for="menu in menus" @click="checkMeal($event,menu)">
+                      <span>{{menu}}</span><i class="layui-icon"></i>
+                  </div>
+                  <p>今天一共有{{menus.length}}道菜</p>
+                </div>
+              </div>
+              <div class="layui-form-item" v-show="isSeparate">
+                <fieldset class="layui-elem-field">
+                    <legend>已经选择的菜品</legend>
+                    <div class="layui-field-box">
+                      <ul>
+                        <li v-for="(chooseList,cIndex) in chooseLists">
+                            <div class="layui-row">
+                              <div class="layui-col-xs7">
+                                <span v-if="editIndex!==cIndex"><i class="layui-icon mo-icon mo-suc">&#xe605;</i><span>{{chooseList}}</span></span>
+                                <input type="text" name="title" placeholder="请输入今日所有菜品" autocomplete="off" class="layui-input" v-model="chooseList" v-if="editIndex===cIndex">
+                              </div>
+                              <div class="layui-col-xs5">
+                                <div class="layui-btn-group">
+                                  <button class="layui-btn layui-btn-sm" @click="changeMenu(cIndex)">
+                                    <i class="layui-icon">&#xe642;</i>
+                                  </button>
+                                  <button class="layui-btn layui-btn-sm" @click="clearEdit(chooseList,cIndex)">
+                                    <i class="layui-icon">&#xe605;</i>
+                                  </button>
+                                  <button class="layui-btn layui-btn-sm" @click="removeMenu(cIndex)">
+                                    <i class="layui-icon">&#xe640;</i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                        </li>
+                      </ul>
+                    </div>
+                </fieldset>
+              </div>
+
+              <div class="layui-form-item" v-if="!isSeparate">
+                <div class="layui-input-block">
+                    <button class="layui-btn" @click="separateMenu">分解菜品</button>
+                </div>
+              </div>
+              <div class="layui-form-item" v-if="isSeparate">
+                <div class="layui-input-block">
+                    <button class="layui-btn" @click="orderMeal">下单</button>
+                    <button class="layui-btn" @click="countMeal">统计</button>
+                </div>
+              </div>
+            </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</body>
+<script src="../lib/js/vue.min.js"></script>
+<script src="../lib/js/layui.js"></script>
+<script src="../lib/js/lay/modules/form.js"></script>
+<script src="../dist/moTool.js"></script>
+
+<script>
+  new Vue({
+    el: '#menu',
+    data(){
+      let tempIsSeparate = moTool.getItem("isSeparate", false);
+      let tempMenus = moTool.getItem("menus", false);
+      let tempChooseLists = moTool.getItem("chooseLists", false);
+      
+      return {
+        checkClass:'layui-form-checked',
+        checklist:[],
+        isSeparate:!!tempIsSeparate?JSON.parse(tempIsSeparate):false,
+        menus:!!tempMenus?moTool.separateStrByTag(tempMenus,","):[],
+        chooseLists:!!tempChooseLists?moTool.separateStrByTag(tempChooseLists,"|"):[],
+        editIndex:-1
+      }
+    },
+    methods: {
+      separateMenu(){
+        let _this = this;
+        if(_this.menus.length !== 0){
+          _this.showLoading();
+          _this.getConfirm('请确定今天将要区分的菜品',_this.menus,function(){
+            _this.menus = moTool.separateStrByTag(_this.menus);
+            _this.isSeparate = true;
+            moTool.setItem("menus", _this.menus, false);
+            moTool.setItem("isSeparate", _this.isSeparate, false);            
+          });
+        }else{
+          _this.catchErr("请填写今天的菜品");
+        }
+      },
+      showLoading(){
+        layer.msg('<i class="layui-icon mo-err-icon">&#xe63d;</i>');
+      },
+      checkMeal(evt,menu){
+        let _this = this;           
+        let tempClassList = evt.currentTarget.classList;
+        let checkType = tempClassList.toggle(_this.checkClass);
+        if(checkType){//当添加样式的时候
+          _this.checklist.push(menu)
+        }else{//当移除样式的时候
+          _this.checklist.pop(menu)
+        }
+        console.log(_this.checklist)
+      },
+      orderMeal(){
+        let _this = this;   
+        const tempLength = _this.checklist.length;
+        const checkNum = 3;
+        if(tempLength === 0){
+          _this.catchErr("必须要选择一个菜品");
+        }else if(tempLength == checkNum){
+          // moTool.setItem("checklist", _this.checklist, false);
+          let checkDom = [...document.querySelectorAll('.'+_this.checkClass)];
+          checkDom.forEach(element => {
+            element.classList.remove(_this.checkClass);
+          });
+          _this.chooseLists.push(_this.checklist.toString()+"|");
+          moTool.setItem("chooseLists", _this.chooseLists, false);
+          _this.checklist = [];
+        }else if(tempLength < checkNum||tempLength > checkNum){
+          _this.catchErr("必须并且只能选择三个菜品");
+        }
+      },
+      changeMenu(index){
+        this.editIndex = index;
+      },
+      clearEdit(chooseList,index){
+        let _this = this;
+        if(_this.editIndex === index){
+          this.editIndex = -1;
+          this.chooseLists[index] = chooseList;
+        }
+
+      },
+      filterChoose(List){
+        let tempStr = List.concat().toString();
+        let splitTag = '|';
+        let findIndex = tempStr.lastIndexOf(splitTag);
+        let res;
+        if(findIndex>-1){
+          res = tempStr.concat().substr(0,findIndex);
+        }else{
+          res = tempStr;
+        }
+        
+        return res;
+      },
+      closeLoading(index){
+        layer.close(index);  
+      },
+      removeMenu(index){
+        let _this =this;
+        _this.getConfirm('请确认','确认取消这个订单吗？',()=>{
+          _this.chooseLists.splice(index, 1);
+          if(_this.editIndex === index){
+            this.editIndex = -1;
+          }
+
+        })
+      },
+      countMeal(){
+        let _this = this;
+        const orderList = _this.chooseLists;
+        let tempStr ='一共订了'+orderList.length+'份<br/>';
+        orderList.forEach(function(order,index){
+          if(!!order){
+            tempStr += '第'+(index+1)+'份是'+order+'<br/>';
+          }
+        })
+        _this.getSuccess(tempStr)
+      },
+      resetMenu(){
+        let _this = this;        
+        _this.isSeparate = false;
+        moTool.setItem("isSeparate", _this.isSeparate, false);        
+        _this.menus = [];
+        moTool.setItem("menus", _this.menus, false);
+        _this.chooseLists = [];
+        moTool.setItem("chooseLists", _this.chooseLists, false);
+      },
+      getConfirm(title,msg,callback){
+        let _this = this;
+        let openLayerIndex = layer.open({
+          title:title,
+          content: '<i class="layui-icon mo-icon mo-suc">&#xe6b2;</i> '+msg,
+          yes: function(index, layero){
+            callback();
+            _this.closeLoading(index);
+          },
+          cancel: function(){ 
+            //右上角关闭回调
+          }
+        });
+      },
+      getSuccess(msg){
+        layer.open({
+          type: 0, 
+          content: '<i class="layui-icon mo-icon mo-suc">&#xe6af;</i> '+msg 
+        });
+      },
+      catchErr(msg){
+        layer.open({
+          type: 0, 
+          content: '<i class="layui-icon mo-icon mo-err">&#xe69c;</i> '+msg
+        });
+      }
+    }
+  })
+</script>
+</html>
