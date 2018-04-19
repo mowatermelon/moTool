@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../lib/css/mo.css">
 </head>
 <body>
-  <div id="demo" class="layui-container">
+  <div id="components" class="layui-container">
     <h1 class="layui-text-center">vue-esri组件说明文档</h1>
     <hr class="layui-bg-blue">
     <ul class="layui-timeline">
@@ -48,15 +48,14 @@
         </div>
       </li>
     </ul>
-    <!-- <input v-model="message_1"> -->
   </div>
 
 </body>
 <script src="../lib/js/vue.min.js"></script>
 <script src="../lib/js/data.js"></script>
 <script>
-    var app6 = new Vue({
-    el: '#demo',
+  new Vue({
+    el: '#components',
     data(){
       return {funcs: getComponentsData()}
     }

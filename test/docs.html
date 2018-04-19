@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../lib/css/mo.css">
 </head>
 <body>
-  <div id="demo" class="layui-container">
+  <div id="docs" class="layui-container">
     <h1 class="layui-text-center">moTool工具方法使用概述</h1>
     <hr class="layui-bg-blue">
     <ul class="layui-timeline">
@@ -51,15 +51,14 @@
         </div>
       </li>
     </ul>
-    <!-- <input v-model="message_1"> -->
   </div>
 
 </body>
 <script src="../lib/js/vue.min.js"></script>
 <script src="../lib/js/data.js"></script>
 <script>
-    var app6 = new Vue({
-    el: '#demo',
+  new Vue({
+    el: '#docs',
     data(){
       return {funcs: getDocsData()}
     }
