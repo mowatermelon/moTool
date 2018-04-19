@@ -298,6 +298,66 @@ let moTool = {
     */
     formatDate:function(variable) {
         variable.toLocaleString("zh-CN",{hour12:false}).replace(/\b\d\b/g,'0$&').replace(new RegExp('/','gm'),'-');
+    },
+    /**
+     * 对于字符串，根据特定的分割标识，进行分割转化成数组
+     * @param {Date} variable  需要分割的字符串，必选
+    */
+    separateStrByTag:function(variable,sliptTag){
+        let res = null;
+        if(!!variable&&variable.constructor !== Array){
+            if(!sliptTag){
+                sliptTag = '，';
+            }
+            res = variable.split(sliptTag);
+        }
+
+       return res
+    },
+    /**
+     * 存储数值
+     * @param {String} name  该存储的标识名，请注意唯一性
+     * @param {String,JSON} value  该存储的具体值
+     * @param {Boolean} type  该存储具体值的类型，设置为true则是说明具体值是非字符串格式，反正则不是
+     * @returns 无返回值
+     * 
+    */
+    setItem:function(name, value, type){
+        if (type) {
+          value = JSON.stringify(value)
+        }
+        window.localStorage.setItem(name, value)
+    },
+    /**
+     * 获取数值
+     * @param {String} name  该存储的标识名，请注意唯一性
+     * @param {Boolean} type  该存储具体值的类型，设置为true则是说明具体值是非字符串格式，反正则不是
+     * @returns {String,JSON} 获取到的存储值
+    */
+    getItem:function(name, type){
+        let res = window.localStorage.getItem(name)
+        if (res !== null) {
+            if (type) { // 为布尔值
+                res = JSON.parse(res)
+            }
+        }
+        return res
+    },
+    /**
+     * 存储格式化的数组值
+     * @param {Array} init 需要进行存储的数组数值
+     *          举例  [{name: 'isLogin', value: 'true', type: false}]
+     *          @key {String} name  该存储的标识名，请注意唯一性
+     *          @key {String,JSON} value  该存储的具体值
+     *          @key {Boolean} type  该存储具体值的类型，设置为true则是说明具体值是非字符串格式，反正则不是
+     * @returns 无返回值
+    */
+    initData:function(init){
+        for (let i = 0; i < init.length; i++) {
+            if (window.localStorage.getItem(init[i].name) === null) {
+                this.setItem(init[i].name, init[i].value, init[i].type)
+            }
+        }
     }
 };
 
