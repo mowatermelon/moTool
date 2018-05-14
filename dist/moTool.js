@@ -1,7 +1,7 @@
 /*
  * @Author: melon.wuEva
  * @Date: 2018-02-25 13:48:40
- * @Last Modified time: 2018-03-07 14:32:46
+ * @Last Modified time: 2018-05-15 16:32:46
  */
 
 "use strict";
@@ -295,9 +295,22 @@ let moTool = {
     /**
      * 格式化日期的方法，将日期默认格式转化为yyyy-dd-MM HH:mm:ss
      * @param {Date} variable  需要转化的日期值，必选
-    */
-    formatDate:function(variable) {
-        variable.toLocaleString("zh-CN",{hour12:false}).replace(/\b\d\b/g,'0$&').replace(new RegExp('/','gm'),'-');
+     * @param {Number} type 格式，一共有两种情况，。
+     *                      一种是0，将原始的日期转成yyyy-MM-dd hh:mm:ss格式，默认的格式。
+     *                      一种是1，是将原始的日期转换成yyyyMMddhhmmss格式
+     */
+    formatDate:function(variable, type) {
+        let isDefalut = type === 1 ? false : true;
+        variable = variable.toLocaleString("zh-CN", {
+            hour12: false
+        }); //将默认的日期按照当地的日期格式进行转移，这边转化的效果是yyyy/M/d h:m:s
+        variable = variable.replace(/\b\d\b/g, '0$&'); //将yyyy/M/d h:m:s中的月份，日期，时间只有一位的，用0进行补位，比如将2018/5/14 转换成2018/05/14
+        if (isDefalut) {
+            variable = variable.replace(new RegExp('/', 'gm'), '-'); //将日期转换成yyyy-MM-dd hh:mm:ss
+        } else {
+            variable = variable.replace(/\/|\:|\s/g, ''); //将日期转换成yyyyMMddhhmmss
+        }
+        return variable;
     },
     /**
      * 对于字符串，根据特定的分割标识，进行分割转化成数组
